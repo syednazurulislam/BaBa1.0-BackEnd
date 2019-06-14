@@ -2,7 +2,7 @@
 const createroom = require('../mongoSchema/spiltBillRecords');
 const registerusers = require('../mongoSchema/userdetails');
 const bill = require('../mongoSchema/newbill');
-
+const newbingogame= require('../mongoSchema/BingoGameSchema');
 
 function userregister(req, res, next){
     console.log("in post method userregister");
@@ -51,6 +51,32 @@ console.log(req.body.roomname);
         }
     });
 }
+
+
+
+
+
+//this is to insert bingo user one data into data base
+function createbingoboard(req, res, next){
+  console.log(createbingoboard);
+  console.log(req.body);
+      let newbingoboard= new newbingogame({
+        PlayerOneBoard:req.body.PlayerOneBoard,
+        PlayerOneDetails:req.body.PlayerOneDetails,
+          
+      })
+      console.log(newbingoboard);
+      newbingoboard.save((err, newbingoboard) => {
+          if (err) {
+              res.json(err);
+          } else {
+              console.log("room has created successfully"+newbingoboard);
+        
+              res.json(newbingoboard);
+          }
+      });
+  }
+
 
 
 function findmySplitboards(req, res, next){
@@ -267,6 +293,17 @@ exports.deletebill=function(req,res,next){
 res.json("deletedSuccessfully");
 })
 }
+
+
+exports.listbingowaitingboards=function(req,res,next){
+  console.log("listbingowaitingboards");
+  newbingogame.find({PlayerTwoDetails:{$exists: false }},{ _id: 1}).then(result=>{
+   console.log(result);
+   res.json(result);
+  })
+}
+
+
 module.exports.roomdetails=roomdetails;
 module.exports.findroommembers=findroommembers;
 module.exports.finduserlike=finduserlike;
@@ -275,5 +312,4 @@ module.exports.userregister = userregister;
 module.exports.createbillroom = createbillroom;
 module.exports.newbill = newbill;
 module.exports.updatebill = updatebill;
-
-
+module.exports.createbingoboard=createbingoboard;

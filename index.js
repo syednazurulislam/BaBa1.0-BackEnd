@@ -5,6 +5,52 @@ var mongoose = require('mongoose');
 var bodyparser = require('body-parser');
 var cors = require('cors');
 var app = express();
+var server=require('http').createServer(app);
+var socketio=require('socket.io');
+var io=socketio().listen(server);
+
+// // socket connection
+// io.on("connection",function(socket){
+//     console.log ("a connection has been made by socket"+socket.id);
+//     socket.on("disconnect",function(){
+//         console.log("the user has disconnected");
+    
+//     })
+//     socket.on("Message",function(data){
+//         console.log(data.message)
+//         io.emit("Message",data);
+//     })
+// })
+
+
+//sockets name-space
+io.of("/bingo").on("connection",(socket)=>{
+    console.log("new user")
+// socket.emit("Message","helloworld");
+socket.on("GameData",function(data){
+    console.log(data)
+var roomid=data.roomid;
+var message=data.message
+    socket.join(roomid);
+    socket.broadcast.to(roomid).emit("GameData",message);
+     
+    
+ 
+})
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //adding middleware
 app.use(cors());
@@ -36,7 +82,6 @@ app.get('/',(req,res)=>{
 })
 
 
-
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log("Server has been started at post: "+PORT);
 })

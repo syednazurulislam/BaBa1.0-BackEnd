@@ -34,7 +34,8 @@ route.post('/updatebillroom',MongoDB.updatebillroom);
 route.post('/UpdatePaidInBill',MongoDB.UpdatePaidInBill);
 route.post('/deletebillroom',MongoDB.deletebillroom);
 route.post('/deletebill',MongoDB.deletebill);
-
+route.post('/createbingoboard',MongoDB.createbingoboard);
+route.post('/listbingowaitingboards',MongoDB.listbingowaitingboards);
 
 module.exports = route;
 
