@@ -62,8 +62,7 @@ function createbingoboard(req, res, next){
   console.log(req.body);
       let newbingoboard= new newbingogame({
         PlayerOneBoard:req.body.PlayerOneBoard,
-        PlayerOneDetails:req.body.PlayerOneDetails,
-          
+        PlayerOneDetails:req.body.PlayerOneDetails
       })
       console.log(newbingoboard);
       newbingoboard.save((err, newbingoboard) => {
@@ -297,10 +296,28 @@ res.json("deletedSuccessfully");
 
 exports.listbingowaitingboards=function(req,res,next){
   console.log("listbingowaitingboards");
-  newbingogame.find({PlayerTwoDetails:{$exists: false }},{ _id: 1}).then(result=>{
+  newbingogame.find({PlayerTwoDetails:{$exists: false } },{ _id: 1}).then(result=>{
    console.log(result);
    res.json(result);
   })
+}
+
+
+exports.updatebingoboard=function(req,res,next){
+  var update={
+    PlayerTwoDetails:req.body.PlayerTwoDetails,
+    PlayerTwoBoard:req.body.PlayerTwoBoard
+   
+}
+newbingogame.update({_id:req.body.RoomId,PlayerTwoDetails:{$exists:false}},{$set:update}).then(result=>{
+  console.log(result);
+  if(result.nModified==0){
+    res.json({mgs:"Sorry some one already entered into game"});
+  }else if(result.nModified==1){
+     res.json({mgs:"Successfully",PlayerTwoBoard:req.body.PlayerTwoBoard});
+  }
+})
+
 }
 
 

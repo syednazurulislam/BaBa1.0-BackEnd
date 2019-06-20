@@ -1,7 +1,7 @@
 var mongoose= require('mongoose');
 const newbingogame=mongoose.Schema({
   PlayerOneBoard:{
-    type:JSON,
+    type:Array,
     require:true
   },
   PlayerOneDetails:{
@@ -9,7 +9,7 @@ const newbingogame=mongoose.Schema({
     require:true
   },
   PlayerTwoBoard:{
-    type:JSON,
+    type:Array,
     require:true
   },
   PlayerTwoDetails:{
