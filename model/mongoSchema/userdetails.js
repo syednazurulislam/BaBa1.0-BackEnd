@@ -3,6 +3,8 @@ const userdetailsschema=mongoose.Schema({
   
   UserName:{
     type:String,
+
+    
     require:true
   },
 
@@ -11,6 +13,8 @@ const userdetailsschema=mongoose.Schema({
     require:true
   },
   UserId:{
+
+
     type:String,
     require:true
   }
