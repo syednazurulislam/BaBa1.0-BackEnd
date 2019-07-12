@@ -28,14 +28,31 @@ io.of("/bingo").on("connection",(socket)=>{
     console.log("new user")
 // socket.emit("Message","helloworld");
 socket.on("GameData",function(data){
-    console.log(data)
+    console.log(data.message+"============================>")
 var roomid=data.roomid;
 var message=data.message
-    socket.join(roomid);
-    socket.broadcast.to(roomid).emit("GameData",message);
-     
-    
+socket.join(roomid);
+console.log(data.message);
+if(data.message=="winner"){
+    socket.broadcast.to(roomid).emit("GameData",{message:message,players:2});
+}else if(data.message=="lost"){
+    socket.broadcast.to(roomid).emit("GameData",{message:message,players:2});
+
+
+}else if(data.message=="tie"){
+    socket.broadcast.to(roomid).emit("GameData",{message:message,players:2});
  
+}else if(data.message!='connect'){
+    console.log(message);
+    var clients = io.nsps["/bingo"].adapter.rooms[roomid];
+    console.log(clients);
+    console.log(clients.length);
+    socket.broadcast.to(roomid).emit("GameData",{message:message,players:clients.length});
+}else if(data.message=="leave"){
+    socket.leave(roomid,function(err){
+        console.log(err);
+    });
+}
 })
 })
 
@@ -75,7 +92,7 @@ mongoose.connection.on('error',(err)=>{
 })
 
 //declaring the port number
-const PORT = 3000;
+const PORT = 6000;
 
 app.get('/',(req,res)=>{
     res.send("working");
